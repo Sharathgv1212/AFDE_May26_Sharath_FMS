@@ -1,0 +1,25 @@
+# =============================================================
+# Feedback Management System — Python dependencies
+# =============================================================
+# Install with:  pip install -r requirements.txt
+#
+# Uses minimum-version constraints (>=) so pip picks the latest
+# release compatible with your Python interpreter. Tested on
+# Python 3.11, 3.12, 3.13, and 3.14.
+# =============================================================
+
+# Web framework + ASGI server
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.6
+
+# ORM (SQLite driver bundled with Python stdlib)
+sqlalchemy>=2.0.35
+
+# Data validation
+pydantic>=2.9.2
+
+# Multipart form parsing (FastAPI dependency for forms/uploads)
+python-multipart>=0.0.12
+
+# HTTP client used by smoke_test.py
+requests>=2.32.0

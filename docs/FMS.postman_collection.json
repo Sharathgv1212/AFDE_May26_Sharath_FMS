@@ -1,0 +1,175 @@
+{
+  "info": {
+    "name": "Feedback Management System API",
+    "_postman_id": "fms-capstone-phase-1",
+    "description": "Complete API collection for the Feedback Management System (FMS). Phase 1 capstone — covers CRUD, search, stats, and validation cases. Base URL is read from the `baseUrl` variable.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8000" },
+    { "key": "feedbackId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/", "host": ["{{baseUrl}}"], "path": [""] }
+      }
+    },
+    {
+      "name": "Feedback - List All",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/feedback", "host": ["{{baseUrl}}"], "path": ["feedback"] }
+      }
+    },
+    {
+      "name": "Feedback - List with Filters (rating=5)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/feedback?rating=5",
+          "host": ["{{baseUrl}}"],
+          "path": ["feedback"],
+          "query": [{ "key": "rating", "value": "5" }]
+        }
+      }
+    },
+    {
+      "name": "Feedback - Get by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/feedback/{{feedbackId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["feedback", "{{feedbackId}}"]
+        }
+      }
+    },
+    {
+      "name": "Feedback - Create (POST)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 201', () => pm.response.to.have.status(201));",
+              "const body = pm.response.json();",
+              "pm.test('Has feedback_id', () => pm.expect(body).to.have.property('feedback_id'));",
+              "pm.collectionVariables.set('feedbackId', body.feedback_id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"participant_name\": \"Sharath\",\n  \"program_name\": \"FastAPI Workshop\",\n  \"rating\": 5,\n  \"comments\": \"Excellent session — very hands-on.\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/feedback", "host": ["{{baseUrl}}"], "path": ["feedback"] }
+      }
+    },
+    {
+      "name": "Feedback - Update (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rating\": 4,\n  \"comments\": \"Updated — minor pacing issue but otherwise great.\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/feedback/{{feedbackId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["feedback", "{{feedbackId}}"]
+        }
+      }
+    },
+    {
+      "name": "Feedback - Delete",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/feedback/{{feedbackId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["feedback", "{{feedbackId}}"]
+        }
+      }
+    },
+    {
+      "name": "Feedback - Stats",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/feedback/stats",
+          "host": ["{{baseUrl}}"],
+          "path": ["feedback", "stats"]
+        }
+      }
+    },
+    {
+      "name": "Search - Keyword",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/search?keyword=react",
+          "host": ["{{baseUrl}}"],
+          "path": ["search"],
+          "query": [{ "key": "keyword", "value": "react" }]
+        }
+      }
+    },
+    {
+      "name": "Search - Combined (keyword + rating + program)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/search?keyword=workshop&rating=5&program=FastAPI",
+          "host": ["{{baseUrl}}"],
+          "path": ["search"],
+          "query": [
+            { "key": "keyword", "value": "workshop" },
+            { "key": "rating", "value": "5" },
+            { "key": "program", "value": "FastAPI" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Validation - Invalid Rating (expect 422)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"participant_name\": \"Test\",\n  \"program_name\": \"Demo\",\n  \"rating\": 9\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/feedback", "host": ["{{baseUrl}}"], "path": ["feedback"] }
+      }
+    },
+    {
+      "name": "Not Found - Invalid ID (expect 404)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/feedback/99999",
+          "host": ["{{baseUrl}}"],
+          "path": ["feedback", "99999"]
+        }
+      }
+    }
+  ]
+}

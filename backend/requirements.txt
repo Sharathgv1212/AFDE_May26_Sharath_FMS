@@ -1,0 +1,8 @@
+# Backend dependencies — uses >= so pip picks Python 3.14-compatible wheels.
+# Top-level requirements.txt mirrors this list.
+
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.6
+sqlalchemy>=2.0.35
+pydantic>=2.9.2
+python-multipart>=0.0.12
